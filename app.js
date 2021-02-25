@@ -2,6 +2,7 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const Breed = require('./models/breed')
 
 mongoose.connect('mongodb://localhost/kittipedia', {
   useNewUrlParser: true, useUnifiedTopology: true
@@ -28,8 +29,21 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+// Homepage
 app.get('/', (req, res) => {
   res.render('index')
+})
+
+// Go to Breeds page
+app.get('/cats/breeds', (req, res) => {
+  Breed.find()
+    .lean()
+    .then(breeds => {
+      res.render('breeds', { breeds })
+    })
+    .catch(err => {
+      console.log(err)
+    })
 })
 
 app.listen(port, () => {

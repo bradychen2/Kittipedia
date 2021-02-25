@@ -1,0 +1,49 @@
+<div class="container my-3 row justify-content-center">
+  <div class="d-flex my-3" id="func-container">
+    {{!-- Search Bar --}}
+    <div class="container" id="search-bar-container">
+      <form action="" class="d-flex" method="GET">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+
+    {{!-- Filter Dropdown --}}
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+        <li><a class="dropdown-item active" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" href="#">Separated link</a></li>
+      </ul>
+    </div>
+  </div>
+
+  {{!-- Information Card --}}
+  <div class="row justify-content-space" id="card-container">
+    {{#each breeds}}
+    <div class="card col-md-3 mx-2 my-1">
+      <div class="card-header">
+        {{this.name}}
+      </div>
+      <img src={{this.image.url}} class="card-img-top" alt={{this.name}}>
+      <div class="card-body">
+        <p class="card-text">
+          Origin: {{this.origin}}<br>
+          Weight: {{this.weight.metric}} kg<br>
+          Life Span: {{this.life_span}} yrs
+        </p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+</div>

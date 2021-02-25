@@ -1,14 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const Image = require('./image')
 
-const imageSchema = new Schema({
-  breeds: { type: breedSchema },
-  id: String,
-  url: String,
-  width: Number,
-  height: Number
-})
-
+// Define Schema of breeds
 const breedSchema = new Schema({
   weight: {
     imperial: String,
@@ -51,10 +45,11 @@ const breedSchema = new Schema({
   hypoallergenic: { type: Number, max: 1, min: 0 },
   reference_image_id: String,
   image: {
-    type: [imageSchema]
+    id: String,
+    url: String,
+    width: Number,
+    height: Number
   }
 })
 
-
 module.exports = mongoose.model('Breed', breedSchema)
-module.exports = mongoose.model('Image', imageSchema)

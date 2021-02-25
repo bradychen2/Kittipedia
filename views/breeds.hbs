@@ -1,4 +1,76 @@
-<div class="container my-3 row justify-content-center">
+<!-- Modal -->
+{{#each breeds}}
+<div class="modal fade" id="{{this.id}}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">{{this.name}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Origin: {{this.origin}}<br>
+          Weight: {{this.weight.metric}} kg<br>
+          Life Span: {{this.life_span}} yrs
+        </p>
+        <p>
+        <div class="d-flex justify-content-evenly" id="rating-container">
+          <div class="">
+            Affection Level:<br>
+            {{{rateProperty this.affection_level}}}<br>
+            Adaptability:<br>
+            {{{rateProperty this.adaptability}}}<br>
+            Child Friendly:<br>
+            {{{rateProperty this.child_friendly}}}<br>
+            Dog Friendly:<br>
+            {{{rateProperty this.dog_friendly}}}<br>
+            Energy Level:<br>
+            {{{rateProperty this.energy_level}}}<br>
+            Grooming:<br>
+            {{{rateProperty this.grooming}}}
+          </div>
+          <div class="">
+            Health Issues:<br>
+            {{{rateProperty this.health_issues}}}<br>
+            Intelligence:<br>
+            {{{rateProperty this.intelligence}}}<br>
+            Shedding Level:<br>
+            {{{rateProperty this.shedding_level}}}<br>
+            Social Needs:<br>
+            {{{rateProperty this.social_needs}}}<br>
+            Stranger Friendly:<br>
+            {{{rateProperty this.stranger_friendly}}}<br>
+            Vocalisation:<br>
+            {{{rateProperty this.vocalisation}}}
+          </div>
+        </div>
+        </p>
+        <p>
+          {{this.description}}
+        </p>
+        <p>
+          {{#if this.wikipedia_url}}
+          Wikipedia:<br>
+          <a href={{this.wikipedia_url}}>{{this.wikipedia_url}}</a><br>
+          {{/if}}
+          {{#if this.vetstreet_url}}
+          Vetstreet:<br>
+          <a href={{this.vetstreet_url}}>{{this.vetstreet_url}}</a>
+          {{/if}}
+        </p>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}
+
+<div class="container-fluid my-3 row justify-content-center">
   <div class="d-flex my-3" id="func-container">
     {{!-- Search Bar --}}
     <div class="container" id="search-bar-container">
@@ -27,20 +99,23 @@
   </div>
 
   {{!-- Information Card --}}
-  <div class="row justify-content-space" id="card-container">
+  <div class="row justify-content-center" id="card-container">
     {{#each breeds}}
     <div class="card col-md-3 mx-2 my-1">
       <div class="card-header">
         {{this.name}}
       </div>
-      <img src={{this.image.url}} class="card-img-top" alt={{this.name}}>
+      <img src={{this.image.url}} data-bs-toggle="modal" data-bs-target="#{{this.id}}" class="card-img-top h-50"
+        alt={{this.name}}>
       <div class="card-body">
         <p class="card-text">
           Origin: {{this.origin}}<br>
           Weight: {{this.weight.metric}} kg<br>
           Life Span: {{this.life_span}} yrs
         </p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{this.id}}">
+          Detail
+        </a>
       </div>
     </div>
     {{/each}}

@@ -14,6 +14,7 @@ const port = 3000
 
 app.engine('hbs',
   exphbs({
+    helpers: require('./public/handlebarsHelpers'),
     defaultLayout: 'main',
     extname: '.hbs'
   }))

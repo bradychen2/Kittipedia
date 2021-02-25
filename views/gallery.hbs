@@ -1,0 +1,42 @@
+<div class="container-fluid my-3 row justify-content-center">
+  <div class="d-flex w-75 my-3" id="func-container">
+    {{!-- Search Bar --}}
+    <div class="container row w-75 justify-content-center" id="search-bar-container">
+      <form action="" class="d-flex w-75" method="GET">
+        <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+
+    {{!-- Filter Dropdown --}}
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+        <li><a class="dropdown-item active" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" href="#">Separated link</a></li>
+      </ul>
+    </div>
+  </div>
+
+  {{!-- Information Card --}}
+  <div class="d-flex flex-wrap justify-content-around" id="card-container">
+    {{#each images}}
+    <div class="card w-25 align-self-baseline">
+      <div class="card-body">
+        <img src={{this.url}} data-bs-toggle="modal" data-bs-target="#img-{{this._id}}" class="card-img-top"
+          alt={{this.name}}>
+        <a href="" class="btn btn-primary">Detail</a>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+</div>

@@ -16,7 +16,7 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-axios.get(BASE_URL + '/v1/breeds')
+axios.get(BASE_URL + "/v1/breeds")
   .then((res) => {
     let breedsList = []
     breedsList.push(...res.data)

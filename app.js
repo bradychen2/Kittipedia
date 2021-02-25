@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const Breed = require('./models/breed')
+const Image = require('./models/image')
 
 mongoose.connect('mongodb://localhost/kittipedia', {
   useNewUrlParser: true, useUnifiedTopology: true
@@ -41,6 +42,18 @@ app.get('/cats/breeds', (req, res) => {
     .lean()
     .then(breeds => {
       res.render('breeds', { breeds })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+// Go to Gallery page
+app.get('/cats/gallery', (req, res) => {
+  Image.find()
+    .lean()
+    .then(images => {
+      res.render('gallery', { images })
     })
     .catch(err => {
       console.log(err)

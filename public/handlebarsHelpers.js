@@ -12,3 +12,23 @@ Handlebars.registerHelper('rateProperty', (property) => {
   return stars
 })
 
+Handlebars.registerHelper('searchByName', (searchBy) => {
+  if (searchBy === 'name') {
+    return 'selected'
+  }
+  return
+})
+
+Handlebars.registerHelper('searchByAltNames', (searchBy) => {
+  if (searchBy === 'alt_names') {
+    return 'selected'
+  }
+  return
+})
+
+Handlebars.registerHelper('searchByOrigin', (searchBy) => {
+  if (searchBy === 'origin') {
+    return 'selected'
+  }
+  return
+})

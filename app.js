@@ -67,21 +67,55 @@ app.get('/cats/sort', (req, res) => {
 })
 
 
-// Search in Breed page
+// Search in Breeds page
 app.get('/cats/search', (req, res) => {
+  const searchBy = req.query.searchBy
   const keywords = req.query.keywords
   console.log(req.query)
-  return Breed.find({ name: new RegExp(keywords, 'i') })
+  return Breed.find({ [searchBy]: new RegExp(keywords, 'i') })
     .sort({ name: 'asc' })
     .lean()
     .then(breeds => {
-      res.render('breeds', { breeds })
+      res.render('breeds', { breeds, searchBy })
     })
     .catch(err => {
       console.log(err)
     })
 })
 
+// Filter in Breeds page
+app.get('/cats/filter', (req, res) => {
+  let natural = 0
+  let hairless = 0
+  let short_legs = 0
+  let indoor = 0
+  if (req.query.natural === 'on') {
+    natural = 1
+  }
+  if (req.query.hairless === 'on') {
+    hairless = 1
+  }
+  if (req.query.short_legs === 'on') {
+    short_legs = 1
+  }
+  if (req.query.indoor === 'on') {
+    indoor = 1
+  }
+  return Breed
+    .find({
+      natural: new RegExp(natural),
+      hairless: new RegExp(hairless),
+      short_legs: new RegExp(short_legs),
+      indoor: new RegExp(indoor)
+    })
+    .lean()
+    .then(breeds => {
+      res.render('breeds', breeds)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
 
 // Go to Gallery page
 app.get('/cats/gallery', (req, res) => {

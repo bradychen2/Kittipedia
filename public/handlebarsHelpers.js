@@ -11,3 +11,4 @@ Handlebars.registerHelper('rateProperty', (property) => {
   }
   return stars
 })
+

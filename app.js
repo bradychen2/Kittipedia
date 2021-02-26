@@ -22,6 +22,8 @@ app.engine('hbs',
 app.set('view engine', 'hbs')
 
 app.use(express.static('./public'))
+app.use(bodyParser.urlencoded({ extended: true }))
+
 
 db.on('error', () => {
   console.log('mongodb error!')
@@ -47,6 +49,39 @@ app.get('/cats/breeds', (req, res) => {
       console.log(err)
     })
 })
+
+
+// Sort breeds by property
+app.get('/cats/sort', (req, res) => {
+  const prop = req.query.property
+  console.log(prop)
+  return Breed.find()
+    .sort({ [prop]: 'desc' })
+    .lean()
+    .then(breeds => {
+      res.render('breeds', { breeds })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+
+// Search in Breed page
+app.get('/cats/search', (req, res) => {
+  const keywords = req.query.keywords
+  console.log(req.query)
+  return Breed.find({ name: new RegExp(keywords, 'i') })
+    .sort({ name: 'asc' })
+    .lean()
+    .then(breeds => {
+      res.render('breeds', { breeds })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
 
 // Go to Gallery page
 app.get('/cats/gallery', (req, res) => {

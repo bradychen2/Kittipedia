@@ -10,6 +10,7 @@
       </div>
       <div class="modal-body">
         <p>
+          {{#if this.alt_names}}Alt Names: {{this.alt_names}}<br>{{/if}}
           Origin: {{this.origin}}<br>
           Weight: {{this.weight.metric}} kg<br>
           Life Span: {{this.life_span}} yrs
@@ -69,55 +70,88 @@
 </div>
 {{/each}}
 
-<div class="container-fluid my-3 row justify-content-center">
-  <div class="d-flex my-3" id="func-container">
+
+<div class="container col-md-9 my-3 p-0 d-flex justify-content-between align-items-center">
+  <div class="d-flex my-3 p-0 col-6" id="func-container">
     {{!-- Search Bar --}}
-    <div class="container" id="search-bar-container">
-      <form action="" class="d-flex" method="GET">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
+    <form action="/cats/search" class="d-flex" method="GET">
+      {{!-- Search Dropdown --}}
+      <div class="dropdown mx-1">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="search-dropdown-btn"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          By
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark" id="search-list">
+          <li class="dropdown-item btn active">Name</li>
+          <li class="dropdown-item btn">Alt Name</li>
+          <li class="dropdown-item btn">Origin</li>
+        </ul>
+      </div>
 
-    {{!-- Filter Dropdown --}}
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Dropdown button
-      </button>
-      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-        <li><a class="dropdown-item active" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-        <li><a class="dropdown-item" href="#">Separated link</a></li>
-      </ul>
-    </div>
+      {{!-- Search text --}}
+      <input class="form-control me-2" type="text" name="keywords" placeholder="Search" aria-label="Search">
+      {{!-- Search Button --}}
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
   </div>
 
-  {{!-- Information Card --}}
-  <div class="row justify-content-center" id="card-container">
-    {{#each breeds}}
-    <div class="card col-md-3 mx-2 my-1">
-      <div class="card-header">
-        {{this.name}}
-      </div>
-      <img src={{this.image.url}} data-bs-toggle="modal" data-bs-target="#{{this.id}}" class="card-img-top h-50"
-        alt={{this.name}}>
-      <div class="card-body">
-        <p class="card-text">
-          Origin: {{this.origin}}<br>
-          Weight: {{this.weight.metric}} kg<br>
-          Life Span: {{this.life_span}} yrs
-        </p>
-        <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{this.id}}">
-          Detail
-        </a>
-      </div>
-    </div>
-    {{/each}}
-  </div>
+  {{!-- Sort Dropdown --}}
+  <form action="/cats/sort" method="get">
+    <label for="sort-list d-inline-flex align-items-center">
+      Sort:
+      <select class="form-select" name="property" id="sort-list">
+        <option selected value="affection_level">Affection Level</option>
+        <option value="adaptability">Adaptability</option>
+        <option value="child_friendly">Child Friendly</option>
+        <option value="dog_friendly">Dog Friendly</option>
+        <option value="energy_level">Energy Level</option>
+        <option value="grooming">Grooming</option>
+        <option value="health_issues">Health Issues</option>
+        <option value="intelligence">Intelligence</option>
+        <option value="shedding_level">Shedding Level</option>
+        <option value="social_needs">Social Needs</option>
+        <option value="stranger_friendly">Stranger Friendly</option>
+        <option value="vocalisation">Vocalisation</option>
+      </select>
+      <button class="btn btn-secondary" type="submit" id="sort-btn" aria-expanded="false">Sort</button>
+    </label>
+  </form>
 
+  {{!-- Filter Dropdown --}}
+  <div class="dropdown p-0 mx-2">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="filter-dropdown-btn" data-bs-toggle="dropdown"
+      aria-expanded="false">Filter by</button>
+    <ul class="dropdown-menu dropdown-menu-dark" id="filter-list" aria-labelledby="dropdownMenuButton2">
+      <li><a class="dropdown-item active" href="#">Action</a></li>
+      <li><a class="dropdown-item" href="#">Another action</a></li>
+      <li><a class="dropdown-item" href="#">Something else here</a></li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item" href="#">Separated link</a></li>
+    </ul>
+  </div>
+</div>
+
+{{!-- Information Card --}}
+<div class="row justify-content-center" id="card-container">
+  {{#each breeds}}
+  <div class="card col-sm-10 col-md-3 mx-2 my-1" style="height: 430px !important;">
+    <div class="card-header">
+      {{this.name}}
+    </div>
+    <img src={{this.image.url}} data-bs-toggle="modal" data-bs-target="#{{this.id}}"
+      class="card-img-top h-50 img-thumbnail" alt={{this.name}}>
+    <div class="card-body">
+      <p class="card-text">
+        Origin: {{this.origin}}<br>
+        Weight: {{this.weight.metric}} kg<br>
+        Life Span: {{this.life_span}} yrs
+      </p>
+      <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{this.id}}">
+        Detail
+      </a>
+    </div>
+  </div>
+  {{/each}}
 </div>

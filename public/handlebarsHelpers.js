@@ -32,3 +32,18 @@ Handlebars.registerHelper('searchByOrigin', (searchBy) => {
   }
   return
 })
+
+Handlebars.registerHelper('renderCheckbox', (checkbox) => {
+  const properties = ['natural', 'hairless', 'short_legs']
+  let checkboxDisplay = ''
+
+  for (let prop of properties) {
+    if (Object.keys(checkbox).includes(prop)) {
+      checkboxDisplay += `<input class="form-check-input" type="checkbox" name="${prop}" id="${prop}" checked><label class="form-check-label" for="${prop}">${prop}</label>`
+    } else {
+      checkboxDisplay += `<input class="form-check-input" type="checkbox" name="${prop}" id="${prop}"><label class="form-check-label" for="${prop}">${prop}</label>`
+    }
+  }
+
+  return checkboxDisplay
+})

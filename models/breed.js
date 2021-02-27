@@ -50,6 +50,8 @@ const breedSchema = new Schema({
     width: Number,
     height: Number
   }
-})
+},
+  { strictQuery: 'throw' }
+)
 
 module.exports = mongoose.model('Breed', breedSchema)

@@ -110,24 +110,23 @@
       <option value="stranger_friendly">Stranger Friendly</option>
       <option value="vocalisation">Vocalisation</option>
     </select>
-    <button class="btn btn-secondary my-1" type="submit" id="sort-btn" aria-expanded="false">Sort</button>
+    <button class="btn btn-outline-success my-1" type="submit" id="sort-btn" aria-expanded="false">Sort</button>
   </form>
 
   {{!-- Filter Dropdown --}}
   <form action="/cats/filter" class="" method="GET">
     <div>
+      {{#if checkbox}}{{{renderCheckbox checkbox}}}
+      {{else}}
       <input class="form-check-input" type="checkbox" name="natural" id="natural">
       <label class="form-check-label" for="natural">natural</label>
       <input class="form-check-input" type="checkbox" name="hairless" id="hairless">
       <label class="form-check-label" for="hairless">hairless</label>
-    </div>
-    <div>
       <input class="form-check-input" type="checkbox" name="short_legs" id="short_legs">
       <label class="form-check-label" for="short_legs">short legs</label>
-      <input class="form-check-input" type="checkbox" name="indoor" id="indoor">
-      <label class="form-check-label" for="indoor">indoor</label>
+      {{/if}}
     </div>
-    <input class="btn" type="submit" value="Filter">
+    <input class="btn btn-outline-success" type="submit" value="Filter">
   </form>
 </div>
 
@@ -146,7 +145,7 @@
         Weight: {{this.weight.metric}} kg<br>
         Life Span: {{this.life_span}} yrs
       </p>
-      <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{this.id}}">
+      <a href="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#{{this.id}}">
         Detail
       </a>
     </div>

@@ -85,35 +85,33 @@ app.get('/cats/search', (req, res) => {
 
 // Filter in Breeds page
 app.get('/cats/filter', (req, res) => {
-  let natural = 0
-  let hairless = 0
-  let short_legs = 0
-  let indoor = 0
-  if (req.query.natural === 'on') {
-    natural = 1
+  let naturalValue = 0
+  let hairlessValue = 0
+  let shortLegsValue = 0
+  const checkbox = req.query
+
+  if (checkbox.natural === 'on') {
+    naturalValue = 1
   }
-  if (req.query.hairless === 'on') {
-    hairless = 1
+  if (checkbox.hairless === 'on') {
+    hairlessValue = 1
   }
-  if (req.query.short_legs === 'on') {
-    short_legs = 1
+  if (checkbox.short_legs === 'on') {
+    shortLegsValue = 1
   }
-  if (req.query.indoor === 'on') {
-    indoor = 1
-  }
+
   return Breed
     .find({
-      natural: new RegExp(natural),
-      hairless: new RegExp(hairless),
-      short_legs: new RegExp(short_legs),
-      indoor: new RegExp(indoor)
+      natural: naturalValue,
+      hairless: hairlessValue,
+      short_legs: shortLegsValue
     })
     .lean()
     .then(breeds => {
-      res.render('breeds', breeds)
+      res.render('breeds', { breeds, checkbox })
     })
     .catch(err => {
-      console.log(err)
+      res.send(err)
     })
 })
 

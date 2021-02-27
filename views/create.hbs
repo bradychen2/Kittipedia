@@ -1,5 +1,5 @@
 <div class="container row justify-content-center my-3">
-  <form class="col-md-5">
+  <form class="col-md-5" action="/cats" method="POST">
     {{!-- Basic Information --}}
     <div class="mb-3">
       <label for="name" class="form-label">Name</label>
@@ -28,6 +28,22 @@
       {{!-- Number Type Input --}}
     </div>
 
+    {{!-- Boolean properties --}}
+    {{!-- <div class="d-flex justify-content-evenly mt-4">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="natural" name="natural">
+        <label class="form-check-label" for="natural">Natural</label>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="hairless" name="hairless">
+        <label class="form-check-label" for="hairless">Hairless</label>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="short_legs" name="short_legs">
+        <label class="form-check-label" for="short_legs">Short Legs</label>
+      </div>
+    </div> --}}
+
     {{!-- Description --}}
     <div class="mt-3">
       <label for="description" class="form-label">Description</label>
@@ -35,6 +51,11 @@
     </div>
 
     {{!-- Outside Link --}}
+    <div class="my-3">
+      <label for="image" class="form-label">Image</label>
+      <input type="text" class="form-control" id="image"
+        placeholder="ex. https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg" name="image[url]">
+    </div>
     <div class="my-3">
       <label for="wikipedia_url" class="form-label">Wikipedia URL</label>
       <input type="text" class="form-control" id="wikipedia_url"
@@ -44,6 +65,10 @@
       <label for="vetstreet_url" class="form-label">Vetstreet URL</label>
       <input type="text" class="form-control" id="vetstreet_url"
         placeholder="ex. http://www.vetstreet.com/cats/abyssinian" name="vetstreet_url">
+    </div>
+    {{!-- Submit --}}
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-success" type="submit">Create</button>
     </div>
   </form>
 </div>
@@ -82,9 +107,3 @@
 
   renderNumInput()
 </script>
-
-{{!-- <p>
-  {{this.description}}
-</p>
-<p>
-  --}}

@@ -134,12 +134,23 @@ app.get('/cats/gallery', (req, res) => {
     })
 })
 
-// Create new breed
+// Go to create page
 app.get('/cats/create', (req, res) => {
+  // Find one Breed object and pass to hbs
+  // in order to render number-type input.
   return Breed.findOne()
     .then(breed => {
       res.render('create', { breed: breed })
     })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+app.post('/cats', (req, res) => {
+  const newBreedInfo = req.body
+  return Breed.create(newBreedInfo)
+    .then(() => res.redirect('/cats/breeds'))
     .catch(err => {
       console.log(err)
     })

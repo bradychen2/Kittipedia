@@ -1,0 +1,90 @@
+<div class="container row justify-content-center my-3">
+  <form class="col-md-5">
+    {{!-- Basic Information --}}
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="ex. American Shorthair" name="name">
+    </div>
+    <div class="mb-3">
+      <label for="alt-names" class="form-label">Alt Names</label>
+      <input type="text" class="form-control" id="alt-names" placeholder="ex. Highlander, Highland Straight"
+        name="alt_names">
+    </div>
+    <div class="mb-3">
+      <label for="origin" class="form-label">Origin</label>
+      <input type="text" class="form-control" id="origin" placeholder="ex. United States" name="origin">
+    </div>
+    <div class="mb-3">
+      <label for="weight" class="form-label">Weight</label>
+      <input type="text" class="form-control" id="weight" placeholder="ex. 5 - 10" name="weight">
+    </div>
+    <div class="mb-3">
+      <label for="life-span" class="form-label">Life Span</label>
+      <input type="text" class="form-control" id="life-span" placeholder="ex. 12 - 18" name="life_span">
+    </div>
+
+    {{!-- Properties --}}
+    <div class="row g-3" id="number-input-container">
+      {{!-- Number Type Input --}}
+    </div>
+
+    {{!-- Description --}}
+    <div class="mt-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+    </div>
+
+    {{!-- Outside Link --}}
+    <div class="my-3">
+      <label for="wikipedia_url" class="form-label">Wikipedia URL</label>
+      <input type="text" class="form-control" id="wikipedia_url"
+        placeholder="ex. https://en.wikipedia.org/wiki/Abyssinian_(cat)" name="wikipedia_url">
+    </div>
+    <div class="mb-3">
+      <label for="vetstreet_url" class="form-label">Vetstreet URL</label>
+      <input type="text" class="form-control" id="vetstreet_url"
+        placeholder="ex. http://www.vetstreet.com/cats/abyssinian" name="vetstreet_url">
+    </div>
+  </form>
+</div>
+
+<script>
+  let breedObject = {{{ json breed }}}
+
+  function findBoolProp() {
+    let numberPropList = []
+    for (let prop in breedObject) {
+      if (typeof breedObject[prop] === 'number' && prop != '__v') {
+        numberPropList.push(prop)
+      }
+    }
+    return numberPropList
+  }
+
+  function renderNumInput() {
+    const numberPropList = findBoolProp()
+    let numberInputContainer = document.querySelector('#number-input-container')
+    for (let prop of numberPropList) {
+      let labelText = prop.toUpperCase()
+
+      if (prop.includes('_')) {
+        labelText = prop.replace('_', ' ').toUpperCase()
+      }
+
+      numberInputContainer.innerHTML += `
+    <div class="col-6">
+      <label for="${prop}">${labelText}</label>
+      <input type="number" class="form-control" max="5" min="1" placeholder="range: 1 - 5" id="${prop}" name="${prop}">
+    </div>
+    `
+    }
+  }
+
+  renderNumInput()
+</script>
+
+{{!-- <p>
+  {{this.description}}
+</p>
+<p>
+  --}}

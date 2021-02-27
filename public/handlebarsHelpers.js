@@ -47,3 +47,7 @@ Handlebars.registerHelper('renderCheckbox', (checkbox) => {
 
   return checkboxDisplay
 })
+
+Handlebars.registerHelper('json', function (content) {
+  return JSON.stringify(content);
+})

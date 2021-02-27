@@ -1,7 +1,7 @@
 <!-- Modal -->
 {{#each breeds}}
-<div class="modal fade" id="{{this.id}}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-  aria-hidden="true">
+<div class="modal fade" id="breed-{{this._id}}" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -137,7 +137,7 @@
     <div class="card-header">
       {{this.name}}
     </div>
-    <img src={{this.image.url}} data-bs-toggle="modal" data-bs-target="#{{this.id}}"
+    <img src={{this.image.url}} data-bs-toggle="modal" data-bs-target="#breed-{{this._id}}"
       class="card-img-top h-50 img-thumbnail" alt={{this.name}}>
     <div class="card-body">
       <p class="card-text">
@@ -145,7 +145,7 @@
         Weight: {{this.weight.metric}} kg<br>
         Life Span: {{this.life_span}} yrs
       </p>
-      <a href="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#{{this.id}}">
+      <a href="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#breed-{{this._id}}">
         Detail
       </a>
     </div>

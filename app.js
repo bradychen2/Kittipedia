@@ -69,9 +69,10 @@ app.get('/cats/sort', (req, res) => {
 
 // Search in Breeds page
 app.get('/cats/search', (req, res) => {
-  const searchBy = req.query.searchBy
+  const searchBy = req.query.searchBy // Search category
   const keywords = req.query.keywords
   console.log(req.query)
+  // Construct regular expression with case insensitive 'i' for search
   return Breed.find({ [searchBy]: new RegExp(keywords, 'i') })
     .sort({ name: 'asc' })
     .lean()
@@ -99,10 +100,11 @@ app.get('/cats/filter', (req, res) => {
   if (checkbox.short_legs === 'on') {
     shortLegsValue = 1
   }
-
+  // If no checkbox is checked, redirect to breeds page 
   if (Object.keys(checkbox).length === 0) {
     res.redirect('/cats/breeds')
   } else {
+    // If any filter condition, find data and render the page
     return Breed
       .find({
         natural: naturalValue,
@@ -111,6 +113,7 @@ app.get('/cats/filter', (req, res) => {
       })
       .lean()
       .then(breeds => {
+        // Send checkbox condition for checkbox-rendering
         res.render('breeds', { breeds, checkbox })
       })
       .catch(err => {
@@ -125,6 +128,17 @@ app.get('/cats/gallery', (req, res) => {
     .lean()
     .then(images => {
       res.render('gallery', { images })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+// Create new breed
+app.get('/cats/create', (req, res) => {
+  return Breed.findOne()
+    .then(breed => {
+      res.render('create', { breed: breed })
     })
     .catch(err => {
       console.log(err)

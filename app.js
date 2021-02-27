@@ -100,19 +100,23 @@ app.get('/cats/filter', (req, res) => {
     shortLegsValue = 1
   }
 
-  return Breed
-    .find({
-      natural: naturalValue,
-      hairless: hairlessValue,
-      short_legs: shortLegsValue
-    })
-    .lean()
-    .then(breeds => {
-      res.render('breeds', { breeds, checkbox })
-    })
-    .catch(err => {
-      res.send(err)
-    })
+  if (Object.keys(checkbox).length === 0) {
+    res.redirect('/cats/breeds')
+  } else {
+    return Breed
+      .find({
+        natural: naturalValue,
+        hairless: hairlessValue,
+        short_legs: shortLegsValue
+      })
+      .lean()
+      .then(breeds => {
+        res.render('breeds', { breeds, checkbox })
+      })
+      .catch(err => {
+        res.send(err)
+      })
+  }
 })
 
 // Go to Gallery page

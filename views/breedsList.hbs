@@ -97,7 +97,9 @@
       Sort by:
     </label>
     <select class="form-select mx-1" name="property" id="sort-list">
-      <option selected value="affection_level">Affection Level</option>
+      {{#if prop}}{{{renderSortOption prop breeds}}}
+      {{else}}
+      <option value="affection_level">Affection Level</option>
       <option value="adaptability">Adaptability</option>
       <option value="child_friendly">Child Friendly</option>
       <option value="dog_friendly">Dog Friendly</option>
@@ -109,6 +111,7 @@
       <option value="social_needs">Social Needs</option>
       <option value="stranger_friendly">Stranger Friendly</option>
       <option value="vocalisation">Vocalisation</option>
+      {{/if}}
     </select>
     <button class="btn btn-outline-success my-1" type="submit" id="sort-btn" aria-expanded="false">Sort</button>
   </form>
@@ -139,7 +142,7 @@
 
   {{!-- View Switch --}}
   <div class="d-flex flex-column" id="switch-container">
-    <a href="/cats/breeds"><i class="fa fa-th fa-lg mx-2 mb-3" aria-hidden="true" id="switch-card"></i></a>
+    <a href="/cats/breeds/card"><i class="fa fa-th fa-lg mx-2 mb-3" aria-hidden="true" id="switch-card"></i></a>
     <a href="/cats/breeds/list"><i class="fas fa-list fa-lg mx-2" id="switch-list"></i></a>
   </div>
 </div>

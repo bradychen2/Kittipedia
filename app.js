@@ -1,9 +1,11 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const session = require('express-session')
 const mongoose = require('mongoose')
 const Breed = require('./models/breed')
 const Image = require('./models/image')
+
 
 mongoose.connect('mongodb://localhost/kittipedia', {
   useNewUrlParser: true, useUnifiedTopology: true
@@ -23,7 +25,11 @@ app.set('view engine', 'hbs')
 
 app.use(express.static('./public'))
 app.use(bodyParser.urlencoded({ extended: true }))
-
+app.use(session({
+  secret: 'superKittie',
+  resave: true,
+  saveUninitialized: false,
+}))
 
 db.on('error', () => {
   console.log('mongodb error!')
@@ -38,11 +44,13 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-// Go to Breeds page (default view: card)
+// Go to Breeds page
 app.get('/cats/breeds', (req, res) => {
   Breed.find()
     .lean()
     .then(breeds => {
+      req.session.breeds = breeds
+      req.session.display = 'card'
       res.render('breeds', { breeds })
     })
     .catch(err => {
@@ -50,31 +58,84 @@ app.get('/cats/breeds', (req, res) => {
     })
 })
 
-// Go to Breeds page (switch view: list)
+// Switch view to list
 app.get('/cats/breeds/list', (req, res) => {
-  Breed.find()
-    .lean()
-    .then(breeds => {
-      res.render('breedsList', { breeds })
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  const prop = req.session.prop
+  if (req.session.breeds === undefined) {
+    Breed.find()
+      .lean()
+      .then(breeds => {
+        req.session.breeds = breeds
+        req.session.display = 'list'
+        res.render('breedsList', { breeds, prop })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  } else {
+    req.session.display = 'list'
+    res.render('breedsList', { breeds: req.session.breeds, prop })
+  }
+})
+
+// Switch view to card
+app.get('/cats/breeds/card', (req, res) => {
+  const prop = req.session.prop
+  if (req.session.breeds === undefined) {
+    Breed.find()
+      .lean()
+      .then(breeds => {
+        req.session.breeds = breeds
+        req.session.display = 'card'
+        res.render('breeds', { breeds, prop })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  } else {
+    req.session.display = 'card'
+    res.render('breeds', { breeds: req.session.breeds, prop })
+  }
 })
 
 // Sort breeds by property
 app.get('/cats/sort', (req, res) => {
   const prop = req.query.property
-  console.log(prop)
-  return Breed.find()
-    .sort({ [prop]: 'desc' })
-    .lean()
-    .then(breeds => {
-      res.render('breeds', { breeds })
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  req.session.prop = prop
+  const display = req.session.display
+
+  if (req.session.breeds) {
+    const breeds = req.session.breeds
+
+    // https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+    // Sort breeds list by prop
+    breeds.sort((a, b) => (a[prop] < b[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0))
+    // Store sorted list into session
+    req.session.breeds = breeds
+
+    // Render by original display (card or list)
+    if (display === 'card') {
+      res.render('breeds', { breeds, prop })
+    } else {
+      res.render('breedsList', { breeds, prop })
+    }
+  } else { // If session no breeds data, find in db
+    return Breed.find()
+      .sort({ [prop]: 'desc' }) // Sort by prop
+      .lean()
+      .then(breeds => {
+        req.session.breeds = breeds
+        // Render by original display (card or list)
+        if (display === 'card') {
+          res.render('breeds', { breeds, prop })
+        } else {
+          res.render('breedsList', { breeds, prop })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 })
 
 
@@ -85,7 +146,7 @@ app.get('/cats/search', (req, res) => {
   console.log(req.query)
   // Construct regular expression with case insensitive 'i' for search
   return Breed.find({ [searchBy]: new RegExp(keywords, 'i') })
-    .sort({ name: 'asc' })
+    .sort({ [searchBy]: 'asc' })
     .lean()
     .then(breeds => {
       res.render('breeds', { breeds, searchBy })
@@ -157,6 +218,7 @@ app.get('/cats/create', (req, res) => {
 
 // Create new breed
 app.post('/cats', (req, res) => {
+  // Check Boolean properties
   if (req.body.natural) {
     req.body.natural = true
   } else {
@@ -174,7 +236,7 @@ app.post('/cats', (req, res) => {
   }
 
   const newBreedInfo = req.body
-
+  // Create new breed data and redirect to breeds page
   return Breed.create(newBreedInfo)
     .then(() => res.redirect('/cats/breeds'))
     .catch(err => {

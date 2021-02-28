@@ -144,25 +144,26 @@
   </div>
 </div>
 
-{{!-- Information Card --}}
-<div class="row justify-content-center" id="card-container">
+{{!-- Information List --}}
+<ul class="list-group col-sm-10 col-md-8 row justify-content-center">
   {{#each breeds}}
-  <div class="card col-sm-10 col-md-3 mx-2 my-1" style="height: 430px !important;">
-    <div class="card-header">
-      {{this.name}}
+  <li type="button"
+    class="list-group-item list-group-item-action list-group-item-dark d-flex align-items-center justify-content-between my-2 py-0"
+    data-bs-toggle="modal" data-bs-target="#breed-{{this._id}}">
+    <div class="d-flex align-items-baseline" id="list-name-img-container">
+      <div class="" id="list-img-container">
+        <img src={{this.image.url}} data-bs-toggle="modal" data-bs-target="#breed-{{this._id}}"
+          class="card-img-top h-100 w-100 img-thumbnail" alt={{this.name}}>
+      </div>
+      <div>
+        <p class="mx-1">{{this.name}}</p>
+      </div>
     </div>
-    <img src={{this.image.url}} data-bs-toggle="modal" data-bs-target="#breed-{{this._id}}"
-      class="card-img-top h-50 img-thumbnail" alt={{this.name}}>
-    <div class="card-body">
-      <p class="card-text">
-        Origin: {{this.origin}}<br>
-        Weight: {{this.weight.metric}} kg<br>
-        Life Span: {{this.life_span}} yrs
-      </p>
-      <a href="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#breed-{{this._id}}">
-        Detail
-      </a>
+    <div>
+      <p class="mx-1 my-1">Origin: {{this.origin}}</p>
+      <p class="mx-1 my-0">Weight: {{this.weight.metric}} kg</p>
+      <p class="mx-1 my-1">Life Span: {{this.life_span}} yrs</p>
     </div>
-  </div>
+  </li>
   {{/each}}
-</div>
+</ul>

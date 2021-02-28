@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-// Go to Breeds page
+// Go to Breeds page (default view: card)
 app.get('/cats/breeds', (req, res) => {
   Breed.find()
     .lean()
@@ -50,6 +50,17 @@ app.get('/cats/breeds', (req, res) => {
     })
 })
 
+// Go to Breeds page (switch view: list)
+app.get('/cats/breeds/list', (req, res) => {
+  Breed.find()
+    .lean()
+    .then(breeds => {
+      res.render('breedsList', { breeds })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
 
 // Sort breeds by property
 app.get('/cats/sort', (req, res) => {

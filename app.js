@@ -86,31 +86,28 @@ app.get('/cats/search', (req, res) => {
 
 // Filter in Breeds page
 app.get('/cats/filter', (req, res) => {
-  let naturalValue = 0
-  let hairlessValue = 0
-  let shortLegsValue = 0
+  searchCondition = {}
   const checkbox = req.query
 
   if (checkbox.natural === 'on') {
-    naturalValue = 1
+    let naturalValue = 1
+    searchCondition.natural = naturalValue
   }
   if (checkbox.hairless === 'on') {
-    hairlessValue = 1
+    let hairlessValue = 1
+    searchCondition.hairless = hairlessValue
   }
   if (checkbox.short_legs === 'on') {
-    shortLegsValue = 1
+    let shortLegsValue = 1
+    searchCondition.short_legs = shortLegsValue
   }
   // If no checkbox is checked, redirect to breeds page 
   if (Object.keys(checkbox).length === 0) {
     res.redirect('/cats/breeds')
   } else {
-    // If any filter condition, find data and render the page
+    // If any search condition, find data and render the page
     return Breed
-      .find({
-        natural: naturalValue,
-        hairless: hairlessValue,
-        short_legs: shortLegsValue
-      })
+      .find(searchCondition)
       .lean()
       .then(breeds => {
         // Send checkbox condition for checkbox-rendering
@@ -147,8 +144,26 @@ app.get('/cats/create', (req, res) => {
     })
 })
 
+// Create new breed
 app.post('/cats', (req, res) => {
+  if (req.body.natural) {
+    req.body.natural = true
+  } else {
+    req.body.natural = false
+  }
+  if (req.body.hairless) {
+    req.body.hairless = true
+  } else {
+    req.body.hairless = false
+  }
+  if (req.body.short_legs) {
+    req.body.short_legs = true
+  } else {
+    req.body.short_legs = false
+  }
+
   const newBreedInfo = req.body
+
   return Breed.create(newBreedInfo)
     .then(() => res.redirect('/cats/breeds'))
     .catch(err => {

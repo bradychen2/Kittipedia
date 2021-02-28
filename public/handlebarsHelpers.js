@@ -39,15 +39,17 @@ Handlebars.registerHelper('renderCheckbox', (checkbox) => {
 
   for (let prop of properties) {
     if (Object.keys(checkbox).includes(prop)) {
-      checkboxDisplay += `<input class="form-check-input" type="checkbox" name="${prop}" id="${prop}" checked><label class="form-check-label" for="${prop}">${prop}</label>`
+      checkboxDisplay += `<label class="form-check-label" for="${prop}"><input class="form-check-input mx-1" type="checkbox" name="${prop}" id="${prop}" checked>${prop}</label>`
     } else {
-      checkboxDisplay += `<input class="form-check-input" type="checkbox" name="${prop}" id="${prop}"><label class="form-check-label" for="${prop}">${prop}</label>`
+      checkboxDisplay += `<label class="form-check-label" for="${prop}"><input class="form-check-input mx-1" type="checkbox" name="${prop}" id="${prop}">${prop}</label>`
     }
   }
 
   return checkboxDisplay
 })
 
+// Use handlebarsHelpers let script access data from the server
+// From stackoverflow https://stackoverflow.com/questions/30767928/accessing-handlebars-variable-via-javascript
 Handlebars.registerHelper('json', function (content) {
   return JSON.stringify(content);
 })

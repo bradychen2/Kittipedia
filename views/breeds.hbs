@@ -63,7 +63,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        {{!-- <button type="button" class="btn btn-primary">Understood</button> --}}
       </div>
     </div>
   </div>
@@ -113,20 +113,28 @@
     <button class="btn btn-outline-success my-1" type="submit" id="sort-btn" aria-expanded="false">Sort</button>
   </form>
 
-  {{!-- Filter Dropdown --}}
-  <form action="/cats/filter" class="" method="GET">
-    <div>
+  {{!-- Filter Checkbox --}}
+  <form action="/cats/filter" class="d-flex align-items-end" method="GET">
+    <div class="d-flex flex-column mx-3">
       {{#if checkbox}}{{{renderCheckbox checkbox}}}
       {{else}}
-      <input class="form-check-input" type="checkbox" name="natural" id="natural">
-      <label class="form-check-label" for="natural">natural</label>
-      <input class="form-check-input" type="checkbox" name="hairless" id="hairless">
-      <label class="form-check-label" for="hairless">hairless</label>
-      <input class="form-check-input" type="checkbox" name="short_legs" id="short_legs">
-      <label class="form-check-label" for="short_legs">short legs</label>
+      <label class="form-check-label" for="natural">
+        <input class="form-check-input mx-1" type="checkbox" name="natural" id="natural">
+        natural
+      </label>
+      <label class="form-check-label" for="hairless">
+        <input class="form-check-input mx-1" type="checkbox" name="hairless" id="hairless">
+        hairless
+      </label>
+      <label class="form-check-label" for="short_legs">
+        <input class="form-check-input mx-1" type="checkbox" name="short_legs" id="short_legs">
+        short legs
+      </label>
       {{/if}}
     </div>
-    <input class="btn btn-outline-success" type="submit" value="Filter">
+    <div>
+      <input class="btn btn-outline-success" type="submit" value="Filter">
+    </div>
   </form>
 </div>
 

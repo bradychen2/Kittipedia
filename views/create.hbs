@@ -15,8 +15,12 @@
       <input type="text" class="form-control" id="origin" placeholder="ex. United States" name="origin">
     </div>
     <div class="mb-3">
-      <label for="weight" class="form-label">Weight</label>
-      <input type="text" class="form-control" id="weight" placeholder="ex. 5 - 10" name="weight">
+      <label for="weight" class="form-label">Weight-imperial</label>
+      <input type="text" class="form-control" id="weight" placeholder="ex. 5 - 10" name="weight[imperial]">
+    </div>
+    <div class="mb-3">
+      <label for="weight" class="form-label">Weight-metric</label>
+      <input type="text" class="form-control" id="weight" placeholder="ex. 5 - 10" name="weight[metric]">
     </div>
     <div class="mb-3">
       <label for="life-span" class="form-label">Life Span</label>
@@ -29,7 +33,7 @@
     </div>
 
     {{!-- Boolean properties --}}
-    {{!-- <div class="d-flex justify-content-evenly mt-4">
+    <div class="d-flex justify-content-evenly mt-4">
       <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" id="natural" name="natural">
         <label class="form-check-label" for="natural">Natural</label>
@@ -42,7 +46,7 @@
         <input class="form-check-input" type="checkbox" id="short_legs" name="short_legs">
         <label class="form-check-label" for="short_legs">Short Legs</label>
       </div>
-    </div> --}}
+    </div>
 
     {{!-- Description --}}
     <div class="mt-3">
@@ -74,11 +78,16 @@
 </div>
 
 <script>
+  // Use handlebarsHelpers let script access data from the server
+  // From stackoverflow https://stackoverflow.com/questions/30767928/accessing-handlebars-variable-via-javascript
   let breedObject = {{{ json breed }}}
 
-  function findBoolProp() {
+  // Find properties with number type in Breed object
+  function findNumProp() {
     let numberPropList = []
     for (let prop in breedObject) {
+      // Prop with number type is pushed into the list.
+      // Exclude property name '__v'
       if (typeof breedObject[prop] === 'number' && prop != '__v') {
         numberPropList.push(prop)
       }
@@ -86,16 +95,20 @@
     return numberPropList
   }
 
+  // Render the number input elements in this page
   function renderNumInput() {
-    const numberPropList = findBoolProp()
+    const numberPropList = findNumProp()
     let numberInputContainer = document.querySelector('#number-input-container')
     for (let prop of numberPropList) {
+      // Create label text content of the inputs
       let labelText = prop.toUpperCase()
 
+      // Replace '_' with space in the label name
       if (prop.includes('_')) {
         labelText = prop.replace('_', ' ').toUpperCase()
       }
 
+      // Create HTML
       numberInputContainer.innerHTML += `
     <div class="col-6">
       <label for="${prop}">${labelText}</label>

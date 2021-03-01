@@ -78,14 +78,15 @@
       {{!-- Search Dropdown --}}
       <div class="mx-1">
         <select class="form-select" name="searchBy" id="search-list">
-          <option {{searchByName searchBy}} value="name">Name</option>
-          <option {{searchByAltNames searchBy}} value="alt_names">Alt Name</option>
-          <option {{searchByOrigin searchBy}} value="origin">Origin</option>
+          <option {{searchByName search}} value="name">Name</option>
+          <option {{searchByAltNames search}} value="alt_names">Alt Name</option>
+          <option {{searchByOrigin search}} value="origin">Origin</option>
         </select>
       </div>
 
       {{!-- Search text --}}
-      <input class="form-control me-2 w-50" type="text" name="keywords" placeholder="Search" aria-label="Search">
+      <input class="form-control me-2 w-50" type="text" name="keywords" placeholder="Search" {{#if
+        keywords}}value={{keywords}}{{/if}}>
       {{!-- Search Button --}}
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>

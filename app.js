@@ -50,6 +50,7 @@ app.get('/cats/breeds', (req, res) => {
     .lean()
     .then(breeds => {
       req.session.breeds = breeds
+
       req.session.display = 'card'
       res.render('breeds', { breeds })
     })
@@ -61,40 +62,56 @@ app.get('/cats/breeds', (req, res) => {
 // Switch view to list
 app.get('/cats/breeds/list', (req, res) => {
   const prop = req.session.prop
-  if (req.session.breeds === undefined) {
+  const search = req.session.search
+  const checkbox = req.session.checkbox
+
+  if (req.session.breeds) {
+    req.session.display = 'list'
+    res.render('breedsList', {
+      breeds: req.session.breeds,
+      prop,
+      search,
+      checkbox
+    })
+  } else {
     Breed.find()
       .lean()
       .then(breeds => {
         req.session.breeds = breeds
         req.session.display = 'list'
-        res.render('breedsList', { breeds, prop })
+        res.render('breedsList', { breeds, prop, search, checkbox })
       })
       .catch(err => {
         console.log(err)
       })
-  } else {
-    req.session.display = 'list'
-    res.render('breedsList', { breeds: req.session.breeds, prop })
   }
 })
 
 // Switch view to card
 app.get('/cats/breeds/card', (req, res) => {
   const prop = req.session.prop
-  if (req.session.breeds === undefined) {
+  const search = req.session.search
+  const checkbox = req.session.checkbox
+
+  if (req.session.breeds) {
+    req.session.display = 'card'
+    res.render('breeds', {
+      breeds: req.session.breeds,
+      prop,
+      search,
+      checkbox
+    })
+  } else {
     Breed.find()
       .lean()
       .then(breeds => {
         req.session.breeds = breeds
         req.session.display = 'card'
-        res.render('breeds', { breeds, prop })
+        res.render('breeds', { breeds, prop, search, checkbox })
       })
       .catch(err => {
         console.log(err)
       })
-  } else {
-    req.session.display = 'card'
-    res.render('breeds', { breeds: req.session.breeds, prop })
   }
 })
 
@@ -103,6 +120,8 @@ app.get('/cats/sort', (req, res) => {
   const prop = req.query.property
   req.session.prop = prop
   const display = req.session.display
+  const search = req.session.search
+  const checkbox = req.session.checkbox
 
   if (req.session.breeds) {
     const breeds = req.session.breeds
@@ -114,10 +133,11 @@ app.get('/cats/sort', (req, res) => {
     req.session.breeds = breeds
 
     // Render by original display (card or list)
-    if (display === 'card') {
-      res.render('breeds', { breeds, prop })
+    if (display === 'list') {
+      res.render('breedsList', { breeds, prop, search, checkbox })
     } else {
-      res.render('breedsList', { breeds, prop })
+      console.log(breeds)
+      res.render('breeds', { breeds, prop, search, checkbox })
     }
   } else { // If session no breeds data, find in db
     return Breed.find()
@@ -126,10 +146,11 @@ app.get('/cats/sort', (req, res) => {
       .then(breeds => {
         req.session.breeds = breeds
         // Render by original display (card or list)
-        if (display === 'card') {
-          res.render('breeds', { breeds, prop })
+        if (display === 'list') {
+          res.render('breedsList', { breeds, prop, search, checkbox })
         } else {
-          res.render('breedsList', { breeds, prop })
+          console.log(breeds)
+          res.render('breeds', { breeds, prop, search, checkbox })
         }
       })
       .catch(err => {
@@ -143,13 +164,15 @@ app.get('/cats/sort', (req, res) => {
 app.get('/cats/search', (req, res) => {
   const searchBy = req.query.searchBy // Search category
   const keywords = req.query.keywords
+  req.session.search = searchBy
   console.log(req.query)
   // Construct regular expression with case insensitive 'i' for search
   return Breed.find({ [searchBy]: new RegExp(keywords, 'i') })
     .sort({ [searchBy]: 'asc' })
     .lean()
     .then(breeds => {
-      res.render('breeds', { breeds, searchBy })
+      req.session.breeds = breeds  // Remember search results
+      res.render('breeds', { breeds, keywords, search: req.session.search })
     })
     .catch(err => {
       console.log(err)
@@ -158,32 +181,49 @@ app.get('/cats/search', (req, res) => {
 
 // Filter in Breeds page
 app.get('/cats/filter', (req, res) => {
-  searchCondition = {}
+  const search = req.session.search
+  const prop = req.session.prop
+  const display = req.session.display
   const checkbox = req.query
+  req.session.checkbox = checkbox
 
-  if (checkbox.natural === 'on') {
-    let naturalValue = 1
-    searchCondition.natural = naturalValue
+  filterCondition = {}
+  for (let prop in checkbox) {
+    filterCondition[prop] = 1
   }
-  if (checkbox.hairless === 'on') {
-    let hairlessValue = 1
-    searchCondition.hairless = hairlessValue
-  }
-  if (checkbox.short_legs === 'on') {
-    let shortLegsValue = 1
-    searchCondition.short_legs = shortLegsValue
-  }
-  // If no checkbox is checked, redirect to breeds page 
-  if (Object.keys(checkbox).length === 0) {
-    res.redirect('/cats/breeds')
+
+  // If session has breeds and checkbox is not empty
+  if (req.session.breeds &&
+    Object.keys(filterCondition).length !== 0) {
+    let breeds = req.session.breeds
+
+    for (let prop in filterCondition) {
+      breeds = breeds.filter(breed => {
+        if (breed[prop] === true) {
+          return breed
+        }
+      })
+    }
+    req.session.breeds = breeds
+
+    if (display === 'list') {
+      // Send checkbox condition for checkbox-rendering
+      res.render('breedsList', { breeds, checkbox, prop, search })
+    } else {
+      res.render('breeds', { breeds, checkbox, prop, search })
+    }
   } else {
-    // If any search condition, find data and render the page
+    // No breeds data in session, find from db
     return Breed
-      .find(searchCondition)
+      .find(filterCondition)
       .lean()
       .then(breeds => {
-        // Send checkbox condition for checkbox-rendering
-        res.render('breeds', { breeds, checkbox })
+        req.session.breeds = breeds
+
+        if (display === 'list') {
+          res.render('breedsList', { breeds, checkbox, prop, search })
+        }
+        res.render('breeds', { breeds, checkbox, prop, search })
       })
       .catch(err => {
         res.send(err)
@@ -194,6 +234,39 @@ app.get('/cats/filter', (req, res) => {
 // Go to Gallery page
 app.get('/cats/gallery', (req, res) => {
   Image.find()
+    .lean()
+    .then(images => {
+      res.render('gallery', { images })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})
+
+// Gallery filter
+app.get('/cats/gallery/filter', (req, res) => {
+  const filterBy = req.query.filterBy
+  let filterCondition = []
+
+  switch (filterBy) {
+    case 'all':
+      break
+    case 'jpg':
+      filterCondition.push('jpg')
+    case 'png':
+      filterCondition.push('png')
+    case 'static':
+      filterCondition.push('jpg', 'png')
+    case 'gif':
+      filterCondition.push('gif')
+  }
+  console.log(filterCondition)
+  return Image.find({
+    $or: [
+      { url: new RegExp(filterCondition[0]) },
+      { url: new RegExp(filterCondition[1]) }
+    ]
+  })
     .lean()
     .then(images => {
       res.render('gallery', { images })

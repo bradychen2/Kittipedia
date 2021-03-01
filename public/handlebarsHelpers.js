@@ -82,8 +82,9 @@ Handlebars.registerHelper('renderSortOption', (property, breeds) => {
 
     if (prop === property) {
       optionDisplay += `<option selected value="${prop}">${propText}</option>`
+    } else {
+      optionDisplay += `<option value="${prop}">${propText}</option>`
     }
-    optionDisplay += `<option value="${prop}">${propText}</option>`
   }
   return optionDisplay
 })

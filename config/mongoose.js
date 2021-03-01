@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-
-mongoose.connect('mongodb://localhost/kittipedia', {
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/kittipedia'
+mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true, useUnifiedTopology: true
 })
 

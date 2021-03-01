@@ -9,7 +9,7 @@ const Image = require('./models/image')
 const routes = require('./routes')
 
 const app = express()
-const port = 3000
+const PORT = process.env.PORT || 3000
 
 app.engine('hbs',
   exphbs({
@@ -29,6 +29,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(routes)
 
 
-app.listen(port, () => {
-  console.log(`Express is listening on http://localhost:${port}`)
+app.listen(PORT, () => {
+  console.log(`App is listening on http://localhost:${PORT}`)
 })

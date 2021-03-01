@@ -89,6 +89,20 @@ Handlebars.registerHelper('renderSortOption', (property, breeds) => {
   return optionDisplay
 })
 
+Handlebars.registerHelper('renderImgFilter', (filterBy) => {
+  let option = ['all', 'jpg', 'png', 'static', 'gif']
+  let optionDisplay = ''
+  for (let opt of option) {
+    let optText = opt.toUpperCase()
+    if (opt === filterBy) {
+      optionDisplay += `<option selected value="${opt}">${optText}</option>`
+    } else {
+      optionDisplay += `<option value="${opt}">${optText}</option>`
+    }
+  }
+  return optionDisplay
+})
+
 // Use handlebarsHelpers let script access data from the server
 // From stackoverflow https://stackoverflow.com/questions/30767928/accessing-handlebars-variable-via-javascript
 Handlebars.registerHelper('json', (content) => {

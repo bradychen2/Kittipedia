@@ -246,30 +246,44 @@ app.get('/cats/gallery', (req, res) => {
 // Gallery filter
 app.get('/cats/gallery/filter', (req, res) => {
   const filterBy = req.query.filterBy
-  let filterCondition = []
+  req.session.filterBy = filterBy
+  let filterCondition = { jpg: 'undefined', png: 'undefined', gif: 'undefined' }
 
   switch (filterBy) {
     case 'all':
+      filterCondition.jpg = 'jpg'
+      filterCondition.png = 'png'
+      filterCondition.gif = 'gif'
       break
     case 'jpg':
-      filterCondition.push('jpg')
+      filterCondition.jpg = 'jpg'
+      break
     case 'png':
-      filterCondition.push('png')
+      filterCondition.png = 'png'
+      break
     case 'static':
-      filterCondition.push('jpg', 'png')
+      filterCondition.jpg = 'jpg'
+      filterCondition.png = 'png'
+      break
     case 'gif':
-      filterCondition.push('gif')
+      filterCondition.gif = 'gif'
+      break
   }
+
   console.log(filterCondition)
-  return Image.find({
-    $or: [
-      { url: new RegExp(filterCondition[0]) },
-      { url: new RegExp(filterCondition[1]) }
-    ]
-  })
+  return Image
+    .find({
+      url: {
+        $in: [
+          new RegExp(filterCondition.jpg),
+          new RegExp(filterCondition.png),
+          new RegExp(filterCondition.gif)
+        ]
+      }
+    })
     .lean()
     .then(images => {
-      res.render('gallery', { images })
+      res.render('gallery', { images, filterBy })
     })
     .catch(err => {
       console.log(err)

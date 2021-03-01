@@ -1,0 +1,80 @@
+<div class="container col-md-9 my-3 p-0 d-flex justify-content-between align-items-center">
+  <div class="d-flex my-3 p-0 col-5" id="search-container">
+    {{!-- Search Bar --}}
+    <form action="/cats/breeds/search" class="d-flex" method="GET">
+      {{!-- Search Dropdown --}}
+      <div class="mx-1">
+        <select class="form-select" name="searchBy" id="search-list">
+          <option {{searchByName search}} value="name">Name</option>
+          <option {{searchByAltNames search}} value="alt_names">Alt Name</option>
+          <option {{searchByOrigin search}} value="origin">Origin</option>
+        </select>
+      </div>
+
+      {{!-- Search text --}}
+      <input class="form-control me-2 w-50" type="text" name="keywords" placeholder="Search" {{#if
+        keywords}}value={{keywords}}{{/if}}>
+      {{!-- Search Button --}}
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+
+  {{!-- Sort Dropdown --}}
+  <form action="/cats/breeds/sort" class="d-flex align-items-center" method="GET">
+    <label for="sort-list" class="text-nowrap">
+      Sort by:
+    </label>
+    <select class="form-select mx-1" name="property" id="sort-list">
+      {{#if prop}}{{{renderSortOption prop breeds}}}
+      {{else}}
+      <option value="affection_level">Affection Level</option>
+      <option value="adaptability">Adaptability</option>
+      <option value="child_friendly">Child Friendly</option>
+      <option value="dog_friendly">Dog Friendly</option>
+      <option value="energy_level">Energy Level</option>
+      <option value="grooming">Grooming</option>
+      <option value="health_issues">Health Issues</option>
+      <option value="intelligence">Intelligence</option>
+      <option value="shedding_level">Shedding Level</option>
+      <option value="social_needs">Social Needs</option>
+      <option value="stranger_friendly">Stranger Friendly</option>
+      <option value="vocalisation">Vocalisation</option>
+      {{/if}}
+    </select>
+    <button class="btn btn-outline-success my-1" type="submit" id="sort-btn" aria-expanded="false">Sort</button>
+  </form>
+
+  {{!-- Filter Checkbox --}}
+  <form action="/cats/breeds/filter" class="d-flex align-items-end" method="GET">
+    <div class="d-flex flex-column mx-3">
+      {{#if checkbox}}{{{renderCheckbox checkbox}}}
+      {{else}}
+      <label class="form-check-label" for="natural">
+        <input class="form-check-input mx-1" type="checkbox" name="natural" id="natural">
+        natural
+      </label>
+      <label class="form-check-label" for="hairless">
+        <input class="form-check-input mx-1" type="checkbox" name="hairless" id="hairless">
+        hairless
+      </label>
+      <label class="form-check-label" for="short_legs">
+        <input class="form-check-input mx-1" type="checkbox" name="short_legs" id="short_legs">
+        short legs
+      </label>
+      {{/if}}
+    </div>
+    <div>
+      <input class="btn btn-outline-success" type="submit" value="Filter">
+    </div>
+  </form>
+
+  {{!-- View Switch --}}
+  <div class="d-flex flex-column" id="switch-container">
+    <a href="/cats/breeds/card"><i class="fa fa-th fa-lg mx-2 mb-3" aria-hidden="true" id="switch-card"></i></a>
+    <a href="/cats/breeds/list"><i class="fas fa-list fa-lg mx-2" id="switch-list"></i></a>
+  </div>
+</div>
+
+<div class="container d-flex justify-content-center">
+  <h3 class="">Nothing Found by Input Condition!</h3>
+</div>

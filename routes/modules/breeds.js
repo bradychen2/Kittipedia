@@ -25,12 +25,17 @@ router.get('/list', (req, res) => {
 
   if (req.session.breeds) {
     req.session.display = 'list'
-    res.render('breedsList', {
-      breeds: req.session.breeds,
-      prop,
-      search,
-      checkbox
-    })
+
+    if (req.session.breeds.length === 0) {
+      res.redirect('/cats/notFound')
+    } else {
+      res.render('breedsList', {
+        breeds: req.session.breeds,
+        prop,
+        search,
+        checkbox
+      })
+    }
   } else {
     Breed.find()
       .lean()
@@ -53,12 +58,17 @@ router.get('/card', (req, res) => {
 
   if (req.session.breeds) {
     req.session.display = 'card'
-    res.render('breeds', {
-      breeds: req.session.breeds,
-      prop,
-      search,
-      checkbox
-    })
+
+    if (req.session.breeds.length === 0) {
+      res.redirect('/cats/notFound')
+    } else {
+      res.render('breeds', {
+        breeds: req.session.breeds,
+        prop,
+        search,
+        checkbox
+      })
+    }
   } else {
     Breed.find()
       .lean()
@@ -90,12 +100,16 @@ router.get('/sort', (req, res) => {
     // Store sorted list into session
     req.session.breeds = breeds
 
-    // Render by original display (card or list)
-    if (display === 'list') {
-      res.render('breedsList', { breeds, prop, search, checkbox })
+    if (breeds.length === 0) {
+      res.redirect('/cats/notFound')
     } else {
-      console.log(breeds)
-      res.render('breeds', { breeds, prop, search, checkbox })
+      // Render by original display (card or list)
+      if (display === 'list') {
+        res.render('breedsList', { breeds, prop, search, checkbox })
+      } else {
+        console.log(breeds)
+        res.render('breeds', { breeds, prop, search, checkbox })
+      }
     }
   } else { // If session no breeds data, find in db
     return Breed.find()
@@ -122,6 +136,8 @@ router.get('/search', (req, res) => {
   const searchBy = req.query.searchBy // Search category
   const keywords = req.query.keywords
   req.session.search = searchBy
+  req.session.checkbox = {}
+
   console.log(req.query)
   // Construct regular expression with case insensitive 'i' for search
   return Breed.find({ [searchBy]: new RegExp(keywords, 'i') })
@@ -129,7 +145,12 @@ router.get('/search', (req, res) => {
     .lean()
     .then(breeds => {
       req.session.breeds = breeds  // Remember search results
-      res.render('breeds', { breeds, keywords, search: req.session.search })
+
+      if (breeds.length === 0) {
+        res.redirect('/cats/notFound')
+      } else {
+        res.render('breeds', { breeds, keywords, search: req.session.search })
+      }
     })
     .catch(err => {
       console.log(err)
@@ -163,11 +184,15 @@ router.get('/filter', (req, res) => {
     }
     req.session.breeds = breeds
 
-    if (display === 'list') {
-      // Send checkbox condition for checkbox-rendering
-      res.render('breedsList', { breeds, checkbox, prop, search })
+    if (breeds.length === 0) {
+      res.redirect('/cats/notFound')
     } else {
-      res.render('breeds', { breeds, checkbox, prop, search })
+      if (display === 'list') {
+        // Send checkbox condition for checkbox-rendering
+        res.render('breedsList', { breeds, checkbox, prop, search })
+      } else {
+        res.render('breeds', { breeds, checkbox, prop, search })
+      }
     }
   } else {
     // No breeds data in session, find from db
@@ -177,10 +202,15 @@ router.get('/filter', (req, res) => {
       .then(breeds => {
         req.session.breeds = breeds
 
-        if (display === 'list') {
-          res.render('breedsList', { breeds, checkbox, prop, search })
+        if (breeds.length === 0) {
+          res.redirect('/cats/notFound')
+        } else {
+          if (display === 'list') {
+            res.render('breedsList', { breeds, checkbox, prop, search })
+          } else {
+            res.render('breeds', { breeds, checkbox, prop, search })
+          }
         }
-        res.render('breeds', { breeds, checkbox, prop, search })
       })
       .catch(err => {
         res.send(err)

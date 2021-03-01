@@ -117,7 +117,6 @@ router.get('/sort', (req, res) => {
   }
 })
 
-
 // Search in Breeds page
 router.get('/search', (req, res) => {
   const searchBy = req.query.searchBy // Search category

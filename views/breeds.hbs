@@ -74,7 +74,7 @@
 <div class="container col-md-9 my-3 p-0 d-flex justify-content-between align-items-center">
   <div class="d-flex my-3 p-0 col-5" id="search-container">
     {{!-- Search Bar --}}
-    <form action="/cats/search" class="d-flex" method="GET">
+    <form action="/cats/breeds/search" class="d-flex" method="GET">
       {{!-- Search Dropdown --}}
       <div class="mx-1">
         <select class="form-select" name="searchBy" id="search-list">
@@ -93,7 +93,7 @@
   </div>
 
   {{!-- Sort Dropdown --}}
-  <form action="/cats/sort" class="d-flex align-items-center" method="GET">
+  <form action="/cats/breeds/sort" class="d-flex align-items-center" method="GET">
     <label for="sort-list" class="text-nowrap">
       Sort by:
     </label>
@@ -118,7 +118,7 @@
   </form>
 
   {{!-- Filter Checkbox --}}
-  <form action="/cats/filter" class="d-flex align-items-end" method="GET">
+  <form action="/cats/breeds/filter" class="d-flex align-items-end" method="GET">
     <div class="d-flex flex-column mx-3">
       {{#if checkbox}}{{{renderCheckbox checkbox}}}
       {{else}}

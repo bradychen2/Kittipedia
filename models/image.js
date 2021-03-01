@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Breed = require('./breed')
 
 // Define Schema of images
 const imageSchema = new Schema({

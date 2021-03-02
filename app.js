@@ -34,18 +34,35 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(routes)
 
-
-app.use((req, res) => {
-  res.type('text/plain')
+// 404 Not Found
+app.use((req, res, next) => {
   res.status(404)
-  res.send('404 - Not Found')
+
+  if (req.accepts('html')) {
+    res.render('404')
+    return
+  }
+  if (req.accepts('json')) {
+    res.json({ error: '404 - Not Found' })
+    return
+  }
+  res.type('text/plain').send('404 - Not Found')
 })
 
+// 500 Server Error
 app.use((err, req, res, next) => {
   console.error(err.stock)
-  res.type('plain/text')
   res.status(500)
-  res.send('500 - Server Error')
+
+  if (req.accepts('html')) {
+    res.render('500')
+    return
+  }
+  if (req.accepts('json')) {
+    res.json({ error: '500 - Server Error' })
+    return
+  }
+  res.type('plain/text').send('500 - Server Error')
 })
 
 

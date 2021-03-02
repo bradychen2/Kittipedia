@@ -17,9 +17,14 @@ router.get('/', (req, res) => {
 // Gallery filter
 router.get('/filter', (req, res) => {
   const filterBy = req.query.filterBy
+  // Store the filterBy in session to
+  // tracking and rendering selection list
   req.session.filterBy = filterBy
+
+  // Establish filter condition, the default string is 'undefined'
   let filterCondition = { jpg: 'undefined', png: 'undefined', gif: 'undefined' }
 
+  // Set filterCondition depends on filterBy
   switch (filterBy) {
     case 'all':
       filterCondition.jpg = 'jpg'
@@ -42,6 +47,7 @@ router.get('/filter', (req, res) => {
   }
 
   console.log(filterCondition)
+  // Find in db by filterCondition
   return Image
     .find({
       url: {

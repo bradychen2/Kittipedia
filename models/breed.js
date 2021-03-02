@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // Define Schema of breeds
+// Reference: https://thecatapi.com
 const breedSchema = new Schema({
   weight: {
     type: {

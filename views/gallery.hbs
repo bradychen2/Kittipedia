@@ -22,8 +22,10 @@
     {{#each images}}
     <div class="card col-sm-6 col-md-3 align-self-baseline px-0 mx-1">
       <div class="card-body">
-        <img src={{this.url}} data-bs-toggle="modal" data-bs-target="#img-{{this._id}}"
-          class="card-img-top img-thumbnail" alt={{this.name}}>
+        <a href={{this.url}}>
+          <img src={{this.url}} data-bs-toggle="modal" data-bs-target="#img-{{this._id}}"
+            class="card-img-top img-thumbnail" alt={{this.name}}>
+        </a>
       </div>
       <a href={{this.url}} class="btn btn-outline-primary">
         See Original Img<i class="far fa-search mx-1"></i></i>

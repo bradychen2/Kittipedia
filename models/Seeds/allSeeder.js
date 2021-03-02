@@ -4,6 +4,7 @@ const db = require('../../config/mongoose')
 const breedsList = require('../../public/breeds.json')
 const imagesList = require('../../public/images.json')
 
+// Create seed data from static files, breeds.json and images.json
 db.once('open', () => {
   breedsList.forEach(breed => {
     Breed.create(breed)

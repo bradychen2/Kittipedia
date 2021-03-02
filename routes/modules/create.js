@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 // Create new breed
 router.post('/', (req, res) => {
-  // Check Boolean properties
+  // Check and set Boolean properties
   if (req.body.natural) {
     req.body.natural = true
   } else {

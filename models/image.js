@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // Define Schema of images
+// Reference: https://thecatapi.com
 const imageSchema = new Schema({
   breeds: [{
     weight: {
